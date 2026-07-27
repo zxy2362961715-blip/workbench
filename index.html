@@ -1042,6 +1042,11 @@ registerModule('news',(()=>{
 
   function saveRead(){STO.set('wb_news_read_ids',readIds)}
 
+  // 每条资讯的"查看原文"链接：基于标题做新闻检索，跳转到该热点对应的真实原文页面
+  function newsSearchUrl(t){
+    return 'https://news.baidu.com/ns?word='+encodeURIComponent(t);
+  }
+
   function dayIndex(offset=0){
     const base=new Date(2026,0,1);
     const now=new Date();
@@ -1096,7 +1101,7 @@ registerModule('news',(()=>{
               <span class="news-date-tag">${dateLabel}</span>
             </div>
             <div class="news-summary-v2">${esc(item.summary)}
-              <a href="${item.url}" target="_blank" rel="noopener" class="news-jump" onclick="event.stopPropagation()">
+              <a href="${newsSearchUrl(item.title)}" target="_blank" rel="noopener" class="news-jump" onclick="event.stopPropagation()">
                 查看原文 &nearr;
               </a>
             </div>
