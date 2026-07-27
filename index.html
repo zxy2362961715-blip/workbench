@@ -20,7 +20,7 @@
   --sidebar-w:72px;--sidebar-expand:180px;
 }
 body{
-  font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;
+  font-family:var(--font);background:var(--bg);color:var(--text);height:100vh;height:100dvh;
   -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overflow:hidden;
   display:flex;flex-direction:column;
 }
@@ -74,7 +74,7 @@ body{
 .nav-settings .nav-label{font-size:9px;color:var(--text3)}
 
 /* ====== Main Content ====== */
-.main{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative}
+.main{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative}
 .module{display:none;padding:0;min-height:100%}
 .module.active{display:block}
 
@@ -442,9 +442,6 @@ body{
     </button>
     <button class="nav-item" data-module="english">
       <span class="nav-icon">📖</span><span class="nav-label">英语</span>
-    </button>
-    <button class="nav-item" data-module="dailyquiz">
-      <span class="nav-icon">📝</span><span class="nav-label">每日题目</span>
     </button>
   </nav>
   <div class="sidebar-footer">
@@ -1334,175 +1331,6 @@ registerModule('english',(()=>{
   window.copyText=function(t){
     navigator.clipboard.writeText(t).then(()=>toast('已复制')).catch(()=>toast('复制失败'));
   };
-
-  return render;
-})());
-
-// ============================
-//  MODULE 6: DAILY QUIZ (护理学中级真题)
-// ============================
-registerModule('dailyquiz',(()=>{
-  // 护理学（中级）/主管护师 历年真题题库
-  // 年份按2026→2021倒序排列，每天从当前年份开始抽取，抽完再往前一年
-  const BANK=[
-    {year:2026,q:'正常成人安静状态下脉搏次数为（次/分）：',opts:['60~100','100~120','<60','>120','40~60'],ans:0},
-    {year:2026,q:'成人正常血压收缩压范围为（mmHg）：',opts:['90~139','140~159','<90','>140','80~130'],ans:0},
-    {year:2026,q:'青霉素过敏性休克首选抢救药物是：',opts:['盐酸肾上腺素','异丙肾上腺素','地塞米松','多巴胺','去甲肾上腺素'],ans:0},
-    {year:2026,q:'成人胸外心脏按压的深度为（cm）：',opts:['2~3','3~4','5~6','1~2','≥6'],ans:2},
-    {year:2026,q:'心肺复苏时胸外按压与人工呼吸的比例为：',opts:['15:2','30:2','5:1','30:1','15:1'],ans:1},
-    {year:2026,q:'判断心脏骤停最主要的依据是：',opts:['面色苍白','意识丧失伴大动脉搏动消失','呼吸停止','瞳孔散大','心音消失'],ans:1},
-    {year:2026,q:'开放性气胸的急救处理首先是：',opts:['吸氧','用无菌敷料封闭伤口','立即清创','胸腔闭式引流','气管插管'],ans:1},
-    {year:2026,q:'颅内压增高患者宜采取的体位是：',opts:['平卧位','床头抬高15°~30°','头低足高位','侧卧位','半坐卧位'],ans:1},
-    {year:2026,q:'等渗性脱水患者补液应首选：',opts:['5%葡萄糖','平衡盐溶液','0.9%氯化钠','5%碳酸氢钠','10%葡萄糖'],ans:1},
-    {year:2026,q:'休克患者宜采取的卧位是：',opts:['平卧位','中凹卧位','半坐卧位','端坐位','头低足高位'],ans:1},
-    {year:2025,q:'左心衰竭最典型的临床表现是：',opts:['咳嗽咳痰','呼吸困难和肺水肿','恶心呕吐','水肿','心悸'],ans:1},
-    {year:2025,q:'洋地黄中毒最常见的心律失常是：',opts:['心房颤动','室性期前收缩（二联律）','房室传导阻滞','窦性心动过速','心室颤动'],ans:1},
-    {year:2025,q:'风湿性心脏病中最常受累的瓣膜是：',opts:['二尖瓣','主动脉瓣','三尖瓣','肺动脉瓣','联合瓣膜'],ans:0},
-    {year:2025,q:'消化性溃疡最常见的并发症是：',opts:['癌变','出血','穿孔','幽门梗阻','瘘管'],ans:1},
-    {year:2025,q:'肝硬化患者最常见的死亡原因是：',opts:['上消化道出血','肝性脑病','感染','肝肾综合征','原发性肝癌'],ans:1},
-    {year:2025,q:'急性胰腺炎患者禁用的镇痛药物是：',opts:['哌替啶','阿托品','吗啡','西咪替丁','生长抑素'],ans:2},
-    {year:2025,q:'肺癌大多起源于：',opts:['支气管黏膜上皮','肺泡上皮','细支气管','肺间质','胸膜'],ans:0},
-    {year:2025,q:'诊断呼吸衰竭最重要的依据是：',opts:['呼吸困难','发绀','血气分析 PaO₂<60mmHg伴或不伴PaCO₂>50mmHg','意识障碍','心率增快'],ans:2},
-    {year:2025,q:'糖尿病酮症酸中毒时静脉输注胰岛素宜选用：',opts:['大剂量','小剂量短效胰岛素','中效胰岛素','长效胰岛素','皮下注射'],ans:1},
-    {year:2025,q:'Graves病最具特征性的表现是：',opts:['怕热多汗','突眼','心悸','消瘦','甲状腺肿大'],ans:1},
-    {year:2024,q:'类风湿关节炎最早受累的关节是：',opts:['近端指间关节','远端指间关节','膝关节','髋关节','脊柱'],ans:0},
-    {year:2024,q:'骨折的专有体征是：',opts:['疼痛','肿胀','畸形、反常活动、骨擦音/骨擦感','功能障碍','瘀斑'],ans:2},
-    {year:2024,q:'颅内压增高的"三主征"是：',opts:['头痛、呕吐、视乳头水肿','头痛、头晕、呕吐','呕吐、偏瘫、视乳头水肿','头痛、视乳头水肿、意识障碍','头痛、呕吐、血压升高'],ans:0},
-    {year:2024,q:'甲状腺大部切除术后最危急的并发症是：',opts:['手足抽搐','呼吸困难和窒息','喉返神经损伤','喉上神经损伤','甲状腺危象'],ans:1},
-    {year:2024,q:'乳腺癌最好发的部位是：',opts:['外上象限','内上象限','外下象限','内下象限','乳头乳晕区'],ans:0},
-    {year:2024,q:'急性阑尾炎典型的腹痛特点是：',opts:['持续性腹痛','转移性右下腹痛','阵发性绞痛','腰背部放射痛','全腹痛'],ans:1},
-    {year:2024,q:'肛裂"三联征"是指：',opts:['疼痛、便秘、出血','疼痛、瘙痒、脱出','出血、脱出、疼痛','便秘、脱出、瘙痒','疼痛、出血、狭窄'],ans:0},
-    {year:2024,q:'膀胱癌最常见的症状是：',opts:['尿频尿急','无痛性肉眼血尿','排尿困难','疼痛','腹部包块'],ans:1},
-    {year:2024,q:'良性前列腺增生最典型的症状是：',opts:['血尿','进行性排尿困难','尿失禁','尿痛','尿频'],ans:1},
-    {year:2023,q:'子痫前期/妊娠期高血压疾病治疗的首选解痉药物是：',opts:['地西泮','硫酸镁','苯巴比妥','硝苯地平','呋塞米'],ans:1},
-    {year:2023,q:'使用硫酸镁治疗时，中毒的首要表现是：',opts:['呼吸抑制','心率减慢','膝腱反射消失','尿量减少','血压下降'],ans:2},
-    {year:2023,q:'硫酸镁中毒的解救药物是：',opts:['阿托品','10%葡萄糖酸钙','肾上腺素','地塞米松','碳酸氢钠'],ans:1},
-    {year:2023,q:'前置胎盘的主要临床表现是：',opts:['腹痛伴阴道流血','无痛性反复阴道流血','胎心消失','子宫板状硬','血压升高'],ans:1},
-    {year:2023,q:'胎盘早剥的主要表现是：',opts:['无痛性阴道流血','腹痛伴阴道流血、子宫板状硬','胎动频繁','贫血','发热'],ans:1},
-    {year:2023,q:'新生儿Apgar评分中，轻度窒息为（分）：',opts:['0~3','4~7','8~10','1~2','5~6'],ans:1},
-    {year:2023,q:'小儿前囟闭合的正常时间为：',opts:['3~6个月','1~1.5岁','2岁','6~8个月','3岁'],ans:1},
-    {year:2023,q:'小儿维生素D缺乏性佝偻病初期最常见的表现是：',opts:['骨骼畸形','多汗、易激惹、夜惊','方颅','鸡胸','手足搐搦'],ans:1},
-    {year:2023,q:'法洛四联症包括的四种畸形是：',opts:['室间隔缺损、主动脉骑跨、肺动脉狭窄、右心室肥厚','房间隔缺损、主动脉骑跨、肺动脉狭窄、左心室肥厚','室间隔缺损、主动脉缩窄、肺动脉狭窄、右心室肥厚','房间隔缺损、主动脉骑跨、肺动脉狭窄、右心室肥厚','室间隔缺损、主动脉骑跨、肺静脉狭窄、右心室肥厚'],ans:0},
-    {year:2023,q:'小儿腹泻时口服补液盐（ORS）适用于：',opts:['重度脱水','轻中度脱水无严重呕吐','休克','心功能不全','肾功能不全'],ans:1},
-    {year:2022,q:'成年人的液体失衡中，低渗性缺水血清钠浓度低于（mmol/L）：',opts:['135','130','140','145','150'],ans:0},
-    {year:2022,q:'我国烧伤面积计算采用的中国新九分法，双上肢面积占体表面积的（%）：',opts:['9','18','27','46','36'],ans:1},
-    {year:2022,q:'阿托品化的表现不包括：',opts:['瞳孔扩大','颜面潮红','皮肤干燥','心率减慢','口干'],ans:3},
-    {year:2022,q:'有机磷农药中毒的特效解毒剂是：',opts:['阿托品','解磷定（氯磷定）','阿托品+胆碱酯酶复能剂','纳洛酮','地塞米松'],ans:2},
-    {year:2022,q:'一氧化碳中毒最具特征性的表现是：',opts:['头痛头晕','皮肤黏膜呈樱桃红色','恶心呕吐','意识障碍','呼吸困难'],ans:1},
-    {year:2022,q:'最严重的一种输血反应是：',opts:['发热反应','过敏反应','溶血反应','循环负荷过重','细菌污染反应'],ans:2},
-    {year:2022,q:'溶血反应典型的临床表现是：',opts:['发热寒战','腰背剧痛、血红蛋白尿','皮疹瘙痒','呼吸困难','心率减慢'],ans:1},
-    {year:2022,q:'破伤风患者治疗首选：',opts:['青霉素+破伤风抗毒素（TAT）','甲硝唑','镇静剂','清创','糖皮质激素'],ans:0},
-    {year:2022,q:'执行隔离技术时，无菌持物钳不可夹取：',opts:['无菌纱布','无菌容器','油纱布','无菌器械','无菌溶液瓶'],ans:2},
-    {year:2022,q:'护理程序正确的步骤是：',opts:['评估、诊断、计划、实施、评价','诊断、评估、计划、实施、评价','计划、评估、诊断、实施、评价','评估、计划、诊断、实施、评价','评价、诊断、计划、实施、评估'],ans:0},
-    {year:2021,q:'马斯洛需要层次理论中，最低层次的需要是：',opts:['生理需要','安全需要','爱与归属','尊重','自我实现'],ans:0},
-    {year:2021,q:'下列哪项属于医院内感染：',opts:['入院时已存在的感染','慢性感染急性发作','住院期间获得的感染','院前已感染的潜伏期','既往感染复发'],ans:2},
-    {year:2021,q:'压疮（压力性损伤）好发于：',opts:['骨隆突处','关节屈侧','腹部','背部','四肢末端'],ans:0},
-    {year:2021,q:'鼻饲时每次鼻饲量不应超过（ml）：',opts:['100','200','300','400','500'],ans:1},
-    {year:2021,q:'为膀胱高度膨胀且极度衰弱的患者首次放尿不应超过（ml）：',opts:['500','1000','1500','2000','800'],ans:1},
-    {year:2021,q:'大量不保留灌肠时，成人每次灌肠液量一般为（ml）：',opts:['200~500','500~1000','1000~1500','1500~2000','100~200'],ans:1},
-    {year:2021,q:'发生空气栓塞时，患者宜采取的体位是：',opts:['半坐卧位','头低足高左侧卧位','平卧位','端坐位','中凹卧位'],ans:1},
-    {year:2021,q:'急性血源性骨髓炎最常见的致病菌是：',opts:['溶血性链球菌','金黄色葡萄球菌','大肠杆菌','肺炎球菌','铜绿假单胞菌'],ans:1},
-    {year:2021,q:'颈椎病中最常见的一型是：',opts:['神经根型','脊髓型','椎动脉型','交感神经型','混合型'],ans:0},
-    {year:2021,q:'腰椎间盘突出症最常发生在：',opts:['L1~L2','L2~L3','L4~L5、L5~S1','L3~L4','胸椎'],ans:2},
-    {year:2021,q:'确定患者意识丧失时，判断方法为：',opts:['拍肩并呼叫','摇动身体','掐人中','测血压','听呼吸'],ans:0},
-    {year:2021,q:'成人大量咯血是指24小时咯血量超过（ml）：',opts:['>100','>300','>500','>800','>1000'],ans:2},
-  ];
-
-  const OPT_LABELS=['A','B','C','D','E'];
-
-  let records=STO.get('wb_dq_records',{}); // {qid:{sel:null|idx, correct:bool}}
-  let wrongSet=STO.get('wb_dq_wrong_set',[]); // [qid,...]
-  let dqFilter='all'; // all | wrong | undone
-
-  function saveRecords(){STO.set('wb_dq_records',records)}
-  function saveWrong(){STO.set('wb_dq_wrong_set',wrongSet)}
-
-  function getDayQuestions(){
-    const base=new Date(2026,0,1);
-    const di=Math.floor((new Date()-base)/86400000);
-    const start=(di*10)%BANK.length;
-    const qs=[];
-    for(let i=0;i<10;i++){
-      qs.push({...BANK[(start+i)%BANK.length],_qi:(start+i)%BANK.length});
-    }
-    return qs;
-  }
-
-  function render(){
-    const allQs=getDayQuestions();
-
-    let displayQs=allQs;
-    if(dqFilter==='wrong'){
-      displayQs=allQs.filter(q=>records[q._qi]&&records[q._qi].correct===false);
-    }else if(dqFilter==='undone'){
-      displayQs=allQs.filter(q=>!records[q._qi]||records[q._qi].sel===null);
-    }
-
-    const answered=allQs.filter(q=>records[q._qi]&&records[q._qi].sel!==null).length;
-    const correct=allQs.filter(q=>records[q._qi]&&records[q._qi].correct===true).length;
-
-    MAIN.innerHTML=`
-      <div class="mod-header"><div class="mod-title">\u{1F4DD} 每日十题 · 护理学中级</div></div>
-
-      <!-- Stats -->
-      <div class="dq-stats">
-        <div class="dq-stat"><div class="dq-num">${answered}/10</div><div class="dq-label">已答</div></div>
-        <div class="dq-stat"><div class="dq-num" style="color:var(--success)">${correct}</div><div class="dq-label">正确</div></div>
-        <div class="dq-stat"><div class="dq-num" style="color:var(--danger)">${answered-correct}</div><div class="dq-label">错误</div></div>
-      </div>
-
-      <!-- Filter -->
-      <div class="dq-filter-tabs">
-        <button class="dq-ftab ${dqFilter==='all'?'active':''}" data-dqf="all">全部题目</button>
-        <button class="dq-ftab ${dqFilter==='wrong'?'active':''}" data-dqf="wrong">错题复习</button>
-        <button class="dq-ftab ${dqFilter==='undone'?'active':''}" data-dqf="undone">未做题目</button>
-      </div>
-
-      ${displayQs.length===0?`<div class="empty-state">${dqFilter==='wrong'?'没有错题，继续保持！':'所有题目已完成！'}</div>`:
-      displayQs.map((q,_i)=>{
-        const rec=records[q._qi]||{};
-        const answered=rec.sel!==null&&rec.sel!==undefined;
-        return `
-        <div class="dq-q ${answered?'answered':''}" data-qi="${q._qi}">
-          <div class="dq-q-text">${_i+1}. ${esc(q.q)} <span style="font-size:11px;color:var(--text3)">(${q.year}年真题)</span></div>
-          ${q.opts.map((opt,oi)=>{
-            const isAns=oi===q.ans;
-            const isSel=rec.sel===oi;
-            let cls='dq-opt';
-            if(answered){
-              cls+=' disabled';
-              if(isAns)cls+=' correct';
-              else if(isSel)cls+=' wrong';
-            }else if(isSel)cls+=' sel';
-            return `<button class="${cls}" data-qi="${q._qi}" data-oi="${oi}">
-              <span class="dq-opt-label">${OPT_LABELS[oi]}</span> ${esc(opt)}
-            </button>`;
-          }).join('')}
-          ${answered&&!rec.correct?`<div class="dq-explain">正确答案：${OPT_LABELS[q.ans]} ${esc(q.opts[q.ans])}</div>`:''}
-        </div>`;
-      }).join('')}
-    `;
-
-    // Filter tabs
-    $$('[data-dqf]').forEach(b=>b.onclick=()=>{dqFilter=b.dataset.dqf;render()});
-
-    // Option clicks
-    $$('.dq-opt:not(.disabled)').forEach(opt=>{
-      opt.addEventListener('click',function(){
-        const qi=parseInt(this.dataset.qi);
-        const oi=parseInt(this.dataset.oi);
-        const q=BANK.find((_,i)=>i===qi)||BANK[qi];
-
-        records[qi]={sel:oi, correct:oi===q.ans};
-        if(!records[qi].correct&&!wrongSet.includes(qi)){
-          wrongSet.push(qi);
-          saveWrong();
-        }
-        saveRecords();
-        render();
-      });
-    });
-  }
 
   return render;
 })());
