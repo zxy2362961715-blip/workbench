@@ -6,6 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#f5f5f7">
+<link rel="icon" href="icon.png" type="image/png">
+<link rel="apple-touch-icon" href="icon.png">
 <title>小周的工作台</title>
 <style>
 /* ====== Reset & Variables ====== */
@@ -44,10 +46,11 @@ body{
 }
 .sidebar-header{padding:16px 0 12px;text-align:center;width:100%}
 .sidebar-avatar{
-  width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#0071e3,#5856D6);
+  width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#FFB74D,#FF9800);
   color:#fff;display:flex;align-items:center;justify-content:center;
-  font-size:15px;font-weight:600;margin:0 auto 4px;
+  font-size:18px;font-weight:600;margin:0 auto 4px;overflow:hidden;
 }
+.sidebar-avatar img{width:36px;height:36px;border-radius:50%}
 .sidebar-greeting{font-size:10px;color:var(--text2);text-align:center;white-space:nowrap}
 .sidebar-nav{flex:1;width:100%;padding:4px 0;display:flex;flex-direction:column;align-items:center;gap:2px}
 .nav-item{
@@ -217,17 +220,45 @@ body{
 .chart-wrap{margin:10px 0;position:relative}
 .chart-wrap canvas{width:100%;height:200px;display:block}
 
-/* ====== News ====== */
-.news-item{padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer}
-.news-item:active{background:var(--bg)}
-.news-title{font-size:14px;font-weight:500;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.news-meta{font-size:11px;color:var(--text2);margin-top:4px;display:flex;gap:8px;align-items:center}
-.news-summary{font-size:13px;color:var(--text2);line-height:1.5;margin-top:6px;display:none}
-.news-item.expanded .news-summary{display:block}
-.news-item.expanded .news-title{-webkit-line-clamp:unset}
-.news-badge{font-size:10px;padding:1px 6px;border-radius:8px;font-weight:500}
-.news-badge.hot{background:#fff3e0;color:#e65100}
-.news-badge.medical{background:#e8f5e9;color:#2e7d32}
+/* ====== News v2 ====== */
+.news-cat{margin:0 12px 6px}
+.news-cat-head{
+  display:flex;align-items:center;gap:6px;padding:10px 4px 6px;
+  font-size:13px;font-weight:600;color:var(--text);border-bottom:1px solid var(--border);
+}
+.news-cat-head svg{width:16px;height:16px;flex-shrink:0}
+.news-cat-head span{flex:1}
+.news-divider{height:1px;background:var(--border);margin:0 16px}
+.news-item-v2{
+  padding:12px 16px;cursor:pointer;border-bottom:1px solid #f0f0f0;
+  transition:background .15s;
+}
+.news-item-v2:last-child{border-bottom:none}
+.news-item-v2:active{background:var(--bg)}
+.news-item-v2.read .news-title-v2{color:var(--text3)!important}
+.news-title-v2{
+  font-size:14px;line-height:1.5;color:var(--text);word-break:break-all;
+  -webkit-line-clamp:2;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden;
+}
+.news-item-v2.expanded .news-title-v2{-webkit-line-clamp:unset}
+.news-summary-v2{
+  font-size:13px;color:var(--text2);line-height:1.6;margin-top:6px;
+  display:none;
+}
+.news-item-v2.expanded .news-summary-v2{display:block}
+.news-meta-v2{
+  display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap;
+}
+.news-src-tag{
+  font-size:10px;padding:1px 7px;border-radius:10px;background:var(--bg);color:var(--text2);
+  flex-shrink:0;
+}
+.news-jump{
+  display:inline-flex;align-items:center;gap:2px;
+  font-size:12px;color:var(--accent);margin-top:8px;text-decoration:none;
+}
+.news-jump:visited{color:var(--accent)}
+.news-date-tag{font-size:11px;color:var(--text3)}
 
 /* ====== English Card ====== */
 .eng-card{background:var(--card-bg);border-radius:var(--radius);box-shadow:0 1px 3px rgba(0,0,0,.04);margin:10px 12px;overflow:hidden}
@@ -244,6 +275,20 @@ body{
 .eng-streak-num{font-size:36px;font-weight:200;color:var(--accent)}
 .eng-streak-label{font-size:12px;color:var(--text2);margin-top:2px}
 
+/* NCE sentence card */
+.nce-card{padding:14px 16px;border-bottom:1px solid var(--border)}
+.nce-card:last-child{border-bottom:none}
+.nce-en{font-size:15px;line-height:1.6;color:var(--text);word-break:break-all}
+.nce-zh{font-size:13px;color:var(--text2);line-height:1.5;margin-top:6px}
+.nce-meta{font-size:11px;color:var(--text3);margin-top:4px}
+.nce-play-btn{
+  display:inline-flex;align-items:center;gap:4px;padding:4px 10px;
+  background:var(--bg);border:1px solid var(--border);border-radius:16px;
+  font-size:12px;color:var(--accent);cursor:pointer;margin-top:6px;
+  font-family:var(--font);
+}
+.nce-play-btn:active{background:var(--accent);color:#fff}
+
 /* ====== Practice Quiz ====== */
 .quiz-card{text-align:center;padding:20px 16px}
 .quiz-word{font-size:22px;font-weight:500;margin-bottom:12px}
@@ -256,6 +301,38 @@ body{
 .quiz-result.correct{color:var(--success)}
 .quiz-result.wrong{color:var(--danger)}
 .quiz-hint{font-size:13px;color:var(--text2);margin-top:6px}
+
+/* ====== Daily Quiz (Nursing) ====== */
+.dq-stats{display:flex;gap:8px;padding:8px 12px}
+.dq-stat{
+  flex:1;background:var(--card-bg);border-radius:var(--radius);padding:10px;
+  text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04);
+}
+.dq-num{font-size:22px;font-weight:600;color:var(--accent)}
+.dq-label{font-size:10px;color:var(--text2)}
+.dq-q{padding:14px 16px;border-bottom:1px solid #f0f0f0}
+.dq-q-text{font-size:14px;line-height:1.6;color:var(--text);margin-bottom:10px}
+.dq-opt{
+  display:block;width:100%;text-align:left;padding:10px 14px;margin-bottom:6px;
+  border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  font-size:13px;font-family:var(--font);cursor:pointer;transition:all .15s;
+  background:var(--card-bg);color:var(--text);
+}
+.dq-opt:active{transform:scale(.98)}
+.dq-opt.sel{border-color:var(--accent);background:#f0f7ff}
+.dq-opt.correct{border-color:var(--success);background:#f0fdf4;color:var(--success)}
+.dq-opt.wrong{border-color:var(--danger);background:#fef2f2;color:var(--danger)}
+.dq-opt.disabled{pointer-events:none;opacity:.85}
+.dq-opt-label{font-weight:600;margin-right:6px}
+.dq-explain{font-size:12px;color:var(--text2);margin-top:8px;padding:8px 14px;background:var(--bg);border-radius:var(--radius-sm);display:none}
+.dq-q.answered .dq-explain{display:block}
+.dq-progress{padding:8px 16px;font-size:12px;color:var(--text2);text-align:center}
+.dq-filter-tabs{display:flex;gap:4px;padding:8px 12px 0}
+.dq-ftab{
+  flex:1;padding:6px 0;text-align:center;font-size:11px;border-radius:6px;cursor:pointer;
+  border:1px solid var(--border);background:var(--card-bg);color:var(--text2);font-family:var(--font);
+}
+.dq-ftab.active{border-color:var(--accent);color:var(--accent);font-weight:600;background:#f0f7ff}
 
 /* ====== Settings ====== */
 .setting-item{
@@ -347,7 +424,7 @@ body{
 <!-- ====== SIDEBAR ====== -->
 <aside class="sidebar">
   <div class="sidebar-header">
-    <div class="sidebar-avatar">周</div>
+    <div class="sidebar-avatar"><img src="icon.png" alt=""></div>
     <div class="sidebar-greeting" id="sidebar-greet">下午好</div>
   </div>
   <nav class="sidebar-nav">
@@ -365,6 +442,9 @@ body{
     </button>
     <button class="nav-item" data-module="english">
       <span class="nav-icon">📖</span><span class="nav-label">英语</span>
+    </button>
+    <button class="nav-item" data-module="dailyquiz">
+      <span class="nav-icon">📝</span><span class="nav-label">每日题目</span>
     </button>
   </nav>
   <div class="sidebar-footer">
@@ -408,7 +488,7 @@ function showModal(title,bodyHtml,onSave){
       <div class="modal">
         <div class="modal-header">
           <div class="modal-title">${title}</div>
-          <button class="btn btn-ghost btn-icon" onclick="closeModal()" style="font-size:18px">×</button>
+          <button class="btn btn-ghost btn-icon" onclick="closeModal()" style="font-size:18px">&times;</button>
         </div>
         <div class="modal-body">${bodyHtml}</div>
         <div style="padding:12px 16px 0;display:flex;gap:8px;justify-content:flex-end">
@@ -427,7 +507,7 @@ function closeModal(){$('#modal-container').innerHTML=''}
 // ============================
 function updateGreeting(){
   const h=new Date().getHours();
-  let g='';if(h>=6&&h<9)g='早上好 🌅';else if(h>=9&&h<12)g='上午好 ☀️';else if(h>=12&&h<14)g='中午好 🌤️';else if(h>=14&&h<18)g='下午好 🌤️';else if(h>=18&&h<22)g='晚上好 🌙';else g='夜深了 🌃';
+  let g='';if(h>=6&&h<9)g='早上好 \u{1F305}';else if(h>=9&&h<12)g='上午好 \u{2600}';else if(h>=12&&h<14)g='中午好 \u{26C5}';else if(h>=14&&h<18)g='下午好 \u{26C5}';else if(h>=18&&h<22)g='晚上好 \u{1F319}';else g='夜深了 \u{1F31C}';
   const el=$('#sidebar-greet');if(el)el.textContent=g;
 }
 function updateStatusBar(){
@@ -499,7 +579,7 @@ registerModule('todo',()=>{
     const todayCount=todos.filter(t=>!t.done && (!t.deadline||t.deadline<=todayStr())).length;
 
     MAIN.innerHTML=`
-      <div class="mod-header"><div class="mod-title">📋 待办事项</div>
+      <div class="mod-header"><div class="mod-title">\u{1F4CB} 待办事项</div>
         <div class="mod-header-actions">
           <span style="font-size:11px;color:var(--text2)">今日${todayCount}项</span>
           <button class="btn btn-primary btn-sm" onclick="addTodo()">+ 新增</button>
@@ -513,12 +593,12 @@ registerModule('todo',()=>{
       ${activeTab!=='done'?`
       <div style="display:flex;gap:4px;padding:0 16px 8px">
         <button class="btn btn-sm ${filterPriority==='all'?'btn-primary':'btn-secondary'}" data-pri="all">全部</button>
-        <button class="btn btn-sm ${filterPriority==='P0'?'btn-primary':'btn-secondary'}" data-pri="P0">🔴 紧急</button>
-        <button class="btn btn-sm ${filterPriority==='P1'?'btn-primary':'btn-secondary'}" data-pri="P1">🟡 重要</button>
-        <button class="btn btn-sm ${filterPriority==='P2'?'btn-primary':'btn-secondary'}" data-pri="P2">🟢 普通</button>
+        <button class="btn btn-sm ${filterPriority==='P0'?'btn-primary':'btn-secondary'}" data-pri="P0">\u{1F534} 紧急</button>
+        <button class="btn btn-sm ${filterPriority==='P1'?'btn-primary':'btn-secondary'}" data-pri="P1">\u{1F7E1} 重要</button>
+        <button class="btn btn-sm ${filterPriority==='P2'?'btn-primary':'btn-secondary'}" data-pri="P2">\u{1F7E2} 普通</button>
       </div>`:''}
       <div class="card" style="margin:8px 12px">
-        ${filtered.length===0?`<div class="empty-state">${activeTab==='done'?'暂无已完成事项':'暂无待办，去喝杯咖啡 ☕'}</div>`:
+        ${filtered.length===0?`<div class="empty-state">${activeTab==='done'?'暂无已完成事项':'暂无待办，去喝杯咖啡 \u{2615}'}</div>`:
         filtered.map(t=>`
           <div class="list-item">
             <div class="cb ${t.done?'done':''}" data-id="${t.id}" onclick="toggleTodo('${t.id}')"></div>
@@ -526,8 +606,8 @@ registerModule('todo',()=>{
               <div class="list-item-title ${t.done?'tag-done':''}">${esc(t.text)}</div>
               <div class="list-item-meta">
                 ${t.priority?`<span class="tag tag-p${t.priority.toLowerCase()}">${t.priority}</span>`:''}
-                ${t.deadline?`<span>⏰ ${t.deadline}</span>`:''}
-                ${t.note?`<span>💬 ${esc(t.note)}</span>`:''}
+                ${t.deadline?`<span>\u{23F0} ${t.deadline}</span>`:''}
+                ${t.note?`<span>\u{1F4AC} ${esc(t.note)}</span>`:''}
               </div>
             </div>
             <div class="list-item-actions">
@@ -549,7 +629,7 @@ registerModule('todo',()=>{
       <div class="modal-field"><label>待办内容</label><input class="input" id="todo-text" placeholder="输入待办事项..." maxlength="100"></div>
       <div class="modal-field"><label>优先级</label>
         <select class="select" id="todo-pri" style="width:100%">
-          <option value="P2">🟢 普通</option><option value="P1">🟡 重要</option><option value="P0">🔴 紧急</option>
+          <option value="P2">\u{1F7E2} 普通</option><option value="P1">\u{1F7E1} 重要</option><option value="P0">\u{1F534} 紧急</option>
         </select>
       </div>
       <div class="modal-field"><label>截止日期</label><input class="input" type="date" id="todo-deadline"></div>
@@ -568,10 +648,10 @@ registerModule('todo',()=>{
     if(t){t.done=!t.done;if(t.done)t.doneAt=Date.now();else delete t.doneAt;save();render()}
   };
   window.deleteTodo=function(id){
-    if(confirm('确定删除？')){todos=todos.filter(t=>t.id!==id);save();render();toast('已删除')}
+    if(confirm('\u786E\u5B9A\u5220\u9664\uFF1F'){todos=todos.filter(t=>t.id!==id);save();render();toast('\u5DF2\u5220\u9664')}
   };
   window.archiveTodo=function(id){
-    const t=todos.find(t=>t.id===id);if(t){t.archived=true;save();render();toast('已归档')}
+    const t=todos.find(t=>t.id===id);if(t){t.archived=true;save();render();toast('\u5DF2\u5F52\u6863')}
   };
 
   render();
@@ -582,7 +662,7 @@ registerModule('todo',()=>{
 // ============================
 registerModule('collection',()=>{
   let items=STO.get('wb_collections',[]);
-  let subTab='inspiration'; // inspiration | quote
+  let subTab='inspiration';
   let searchText='';
 
   function save(){STO.set('wb_collections',items)}
@@ -596,12 +676,12 @@ registerModule('collection',()=>{
     list.sort((a,b)=>b.createdAt-a.createdAt);
 
     MAIN.innerHTML=`
-      <div class="mod-header"><div class="mod-title">✨ 积累</div>
+      <div class="mod-header"><div class="mod-title">\u2728 积累</div>
         <button class="btn btn-primary btn-sm" onclick="addCollection()">+ 新增</button>
       </div>
       <div class="sub-tabs">
-        <button class="sub-tab ${subTab==='inspiration'?'active':''}" data-sub="inspiration">💡 灵感随笔</button>
-        <button class="sub-tab ${subTab==='quote'?'active':''}" data-sub="quote">📜 优美句子</button>
+        <button class="sub-tab ${subTab==='inspiration'?'active':''}" data-sub="inspiration">\u{1F4A1} 灵感随笔</button>
+        <button class="sub-tab ${subTab==='quote'?'active':''}" data-sub="quote">\u{1F4DC} 优美句子</button>
       </div>
       <div class="search-wrap">
         <input class="input" id="coll-search" placeholder="搜索内容或标签..." value="${esc(searchText)}">
@@ -660,13 +740,13 @@ registerModule('collection',()=>{
 //  MODULE 3: EXERCISE + WEIGHT
 // ============================
 registerModule('exercise',()=>{
-  let logs=STO.get('wb_exercise_logs',[]); // [{date,type,duration}]
-  let weights=STO.get('wb_weights',[]); // [{date,weight}]
+  let logs=STO.get('wb_exercise_logs',[]);
+  let weights=STO.get('wb_weights',[]);
   let plans=STO.get('wb_exercise_plans',{types:['有氧运动','力量训练','瑜伽/拉伸','跑步','游泳','骑行'],weeklyGoal:3});
   let calYear,calMonth;
   const now=new Date();calYear=now.getFullYear();calMonth=now.getMonth();
   let selectedDate=todayStr();
-  let weightTab='chart'; // chart | list
+  let weightTab='chart';
 
   const workoutTypes=plans.types;
 
@@ -703,10 +783,6 @@ registerModule('exercise',()=>{
 
   function renderWeightChart(){
     if(weights.length<2)return '<div class="empty-state" style="padding:20px">需要至少2条体重数据才能生成趋势图</div>';
-    const sorted=[...weights].sort((a,b)=>a.date.localeCompare(b.date));
-    const wValues=sorted.map(s=>s.weight);
-    const minW=Math.floor(Math.min(...wValues)-1);
-    const maxW=Math.ceil(Math.max(...wValues)+1);
     return `<div class="chart-wrap"><canvas id="weight-canvas"></canvas></div>`;
   }
 
@@ -719,7 +795,7 @@ registerModule('exercise',()=>{
     const todayWeight=getWeightForDate(todayStr());
 
     MAIN.innerHTML=`
-      <div class="mod-header"><div class="mod-title">🏃 运动打卡</div></div>
+      <div class="mod-header"><div class="mod-title">\u{1F3C3} 运动打卡</div></div>
 
       <!-- Stats -->
       <div class="stats-row">
@@ -734,9 +810,9 @@ registerModule('exercise',()=>{
           <div class="cal-header">
             <div class="cal-month">${calYear}年${calMonth+1}月</div>
             <div class="cal-nav">
-              <button id="cal-prev">◀</button>
+              <button id="cal-prev">&#9664;</button>
               <button id="cal-today">今</button>
-              <button id="cal-next">▶</button>
+              <button id="cal-next">&#9654;</button>
             </div>
           </div>
           <div class="cal-weekdays">
@@ -749,7 +825,7 @@ registerModule('exercise',()=>{
       <!-- Selected date info -->
       <div class="card" style="margin:0 12px 10px">
         <div class="card-header">
-          <div class="card-title">📅 ${selectedDate} ${selectedDate===todayStr()?'(今天)':''}</div>
+          <div class="card-title">\u{1F4C5} ${selectedDate} ${selectedDate===todayStr()?'(今天)':''}</div>
           <button class="btn btn-primary btn-sm" onclick="addExerciseLog()">打卡</button>
         </div>
         ${getLogsForDate(selectedDate).length===0?'<div class="empty-state" style="padding:16px">当天暂无运动记录</div>':
@@ -759,7 +835,7 @@ registerModule('exercise',()=>{
               <div class="list-item-title">${esc(l.type)}</div>
               <div class="list-item-meta">${l.duration}分钟</div>
             </div>
-            <button class="btn btn-sm btn-danger" onclick="deleteExerciseLog('${l.date}','${l.type}',${l.duration})">×</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteExerciseLog('${l.date}','${l.type}',${l.duration})">&times;</button>
           </div>
         `).join('')}
       </div>
@@ -767,7 +843,7 @@ registerModule('exercise',()=>{
       <!-- Weight -->
       <div class="card" style="margin:0 12px 10px">
         <div class="card-header">
-          <div class="card-title">⚖️ 体重台账</div>
+          <div class="card-title">\u{2696}\uFE0F 体重台账</div>
           <div style="display:flex;gap:4px">
             <button class="btn btn-sm ${weightTab==='chart'?'btn-primary':'btn-secondary'}" data-wtab="chart">趋势图</button>
             <button class="btn btn-sm ${weightTab==='list'?'btn-primary':'btn-secondary'}" data-wtab="list">列表</button>
@@ -790,7 +866,7 @@ registerModule('exercise',()=>{
 
       <!-- Plan Settings -->
       <div class="card" style="margin:0 12px">
-        <div class="card-header"><div class="card-title">⚙️ 运动计划</div></div>
+        <div class="card-header"><div class="card-title">\u{2699}\uFE0F 运动计划</div></div>
         <div class="card-pad" style="font-size:13px;color:var(--text2)">
           每周目标：<strong>${plans.weeklyGoal}</strong> 次
           <button class="btn btn-sm btn-secondary" onclick="editPlan()" style="margin-left:8px">修改</button>
@@ -908,127 +984,211 @@ registerModule('exercise',()=>{
 });
 
 // ============================
-//  MODULE 4: NEWS
+//  MODULE 4: NEWS (v2 - 4 Categories)
 // ============================
-registerModule('news',()=>{
-  let bookmarks=STO.get('wb_news_bookmarks',[]);
-  let newsFilter='all'; // all | medical
-  let articles=[];
-  let loading=false;
+registerModule('news',(()=>{
+  // Curated news pools per category
+  const POOLS={
+    domestic:[
+      {title:'国务院常务会议研究部署数字经济创新发展举措',summary:'会议指出要加快数字产业化、产业数字化进程，推动数字经济与实体经济深度融合。明确支持人工智能、大数据等新兴技术在制造业、医疗健康等领域应用落地。',source:'新华网',url:'https://www.news.cn'},
+      {title:'全国铁路暑运启动 预计发送旅客超8亿人次',summary:'今年暑期运输自7月1日至8月31日，为期62天。铁路部门优化运力安排，增开热门方向列车，提升旅客出行体验。',source:'中国新闻网',url:'https://www.chinanews.com'},
+      {title:'教育部发布关于进一步加强中小学科学教育的意见',summary:'意见要求各地开齐开足科学课程，鼓励高校和科研院所向中小学开放实验室资源，推动科学家进校园开展科普活动。',source:'人民日报',url:'https://www.people.com.cn'},
+      {title:'我国成功发射遥感三十九号卫星',summary:'该卫星主要用于国土普查、防灾减灾及农业气象观测等领域，标志着我国空间基础设施建设进一步完善。',source:'新华社',url:'https://www.xinhuanet.com'},
+      {title:'多地出台促进高校毕业生就业创业新政策',summary:'政策涵盖岗位扩容、见习补贴、创业扶持等多个方面，重点向基层一线和中小微企业倾斜。',source:'央视新闻',url:'https://news.cctv.com'},
+      {title:'国家发改委：持续深化重点领域价格改革',summary:'聚焦水电气暖等民生领域，完善价格形成机制，保障基本公共服务供给质量。',source:'新华网',url:'https://www.news.cn'},
+      {title:'生态环境部通报上半年全国空气质量状况',summary:'全国339个地级及以上城市平均优良天数比例同比上升，PM2.5浓度持续下降，大气环境治理成效显著。',source:'中国环境报',url:'http://www.cenews.com.cn'},
+      {title:'工信部发布新能源汽车产业发展最新数据',summary:'上半年我国新能源汽车产销量保持全球领先，充电基础设施覆盖面进一步扩大，产业链供应链韧性增强。',source:'工信部',url:'https://www.miit.gov.cn'},
+    ],
+    medical:[
+      {title:'国家医保局发布新版医保药品目录调整方案',summary:'新版方案新增74种药品，重点覆盖肿瘤、慢性病、罕见病等领域，预计每年为患者减负超300亿元。目录调整坚持保基本功能定位。',source:'国家医保局',url:'https://www.nhsa.gov.cn'},
+      {title:'国家卫健委印发基层卫生健康便民惠民服务新举措',summary:'新举措涵盖优化门诊服务流程、延长服务时间、推进家庭医生签约服务等内容，旨在提升基层医疗服务可及性和群众满意度。',source:'国家卫健委',url:'http://www.nhc.gov.cn'},
+      {title:'国家药监局发布医疗器械注册管理新规',summary:'简化部分二类医疗器械审评审批程序，加快创新产品上市速度，同时强化上市后监管和不良事件监测要求。',source:'国家药监局',url:'https://www.nmpa.gov.cn'},
+      {title:'国家疾控局部署秋冬季重点传染病防控工作',summary:'针对流感、新冠等重点传染病，加强监测预警能力建设，做好疫苗储备和接种组织工作，筑牢公共卫生防线。',source:'国家疾控局',url:'http://www.chinacdc.cn'},
+      {title:'国家中医药管理局推进中医优势专科建设',summary:'遴选一批中医优势专科进行重点培育，发挥中医药在治未病、康复中的独特作用，推动中西医协同发展。',source:'国家中医药管理局',url:'http://www.satcm.gov.cn'},
+      {title:'医保跨省异地就医直接结算范围进一步扩大',summary:'新增一批定点医疗机构纳入异地直接结算网络，结算流程持续优化，参保人异地就医更加便捷高效。',source:'国家医保局',url:'https://www.nhsa.gov.cn'},
+      {title:'国家卫健委发布医疗机构感染防控指南更新版',summary:'针对多重耐药菌防控、手卫生规范、环境清洁消毒等方面提出新要求，进一步提升医院感染管理水平。',source:'国家卫健委',url:'http://www.nhc.gov.cn'},
+      {title:'国家药监局公布第五批通过仿制药一致性评价品种名单',summary:'涉及心血管、抗肿瘤等多个治疗领域，通过评价的仿制药在质量和疗效上与原研药等同，可替代使用降低用药成本。',source:'国家药监局',url:'https://www.nmpa.gov.cn'},
+    ],
+    international:[
+      {title:'联合国气候变化大会达成新一轮减排共识框架',summary:'各方就全球温室气体排放峰值时间表初步达成一致，发达国家承诺加大资金和技术支持力度帮助发展中国家应对气候挑战。',source:'新华社',url:'https://www.xinhuanet.com'},
+      {title:'多国央行维持基准利率不变 全球金融市场保持稳定',summary:'美联储、欧洲央行等主要经济体货币政策延续谨慎态度，市场对通胀回落预期趋于乐观。',source:'参考消息',url:'http://www.cankaoxiaoxi.com'},
+      {title:'国际能源署发布全球可再生能源发展年度报告',summary:'报告显示去年全球可再生能源装机容量创历史新高，太阳能和风能贡献了主要增量，能源转型步伐加快。',source:'新华网',url:'https://www.news.cn'},
+      {title:'世界卫生组织发布全球健康安全评估报告',summary:'报告指出各国在突发公共卫生事件应对能力上仍存在显著差距，呼吁加强国际合作和能力建设投入。',source:'WHO',url:'https://www.who.int'},
+      {title:'亚太经合组织领导人非正式会议聚焦区域经济合作',summary:'与会各方就贸易便利化、数字经济发展、绿色转型等议题交换意见，重申维护自由开放贸易体系的重要性。',source:'新华社',url:'https://www.xinhuanet.com'},
+    ],
+    livelihood:[
+      {title:'人社部发布最新社会保险参保情况统计',summary:'截至上季度末，全国基本养老保险参保人数持续增长，失业保险和工伤保险覆盖面稳步扩大，社会保障网进一步织密织牢。',source:'人社部',url:'http://www.mohrss.gov.cn'},
+      {title:'国家统计局公布居民收入与消费数据',summary:'上半年全国居民人均可支配收入实际增长稳定，消费结构持续升级，服务性消费支出占比提高。',source:'国家统计局',url:'http://www.stats.gov.cn'},
+      {title:'住建部推进城镇老旧小区改造提质扩面',summary:'今年计划改造城镇老旧小区数量较上年增加，重点补齐供水供热、停车充电、社区养老等服务短板。',source:'住建部',url:'http://www.mohurd.gov.cn'},
+      {title:'交通运输部优化节假日高速公路免费通行政策',summary:'完善免费通行时段设置和拥堵疏导机制，提升公众出行体验，保障节假日期间道路通行效率和安全。',source:'交通运输部',url:'http://www.mot.gov.cn'},
+      {title:'民政部部署困难群众基本生活保障工作',summary:'加强对低保对象、特困人员等群体的动态监测和精准救助，确保应保尽保、应救尽救，兜住民生底线。',source:'民政部',url:'http://www.mca.gov.cn'},
+      {title:'农业农村部发布夏粮生产形势分析报告',summary:'今年夏粮再获丰收，单产和总产量均实现同比增长，为全年粮食稳产增产奠定良好基础。',source:'农业农村部',url:'http://www.moa.gov.cn'},
+      {title:'教育部推进义务教育优质均衡发展和城乡一体化',summary:'加大对农村地区和薄弱学校的投入力度，缩小城乡、校际差距，让每个孩子都能享有公平而有质量的教育。',source:'教育部',url:'http://www.moe.gov.cn'},
+      {title:'市场监管总局加强民生领域价格监管执法',summary:'聚焦教育收费、医疗服务、物业服务等热点领域，严厉查处各类违法违规价费行为，维护消费者合法权益。',source:'市场监管总局',url:'http://www.samr.gov.cn'},
+    ]
+  };
 
-  // Demo data - in production you'd fetch from an API
-  function getDemoArticles(){
-    const t=todayStr();
-    return [
-      {id:'n1',title:'国务院常务会议研究部署数字经济创新发展',summary:'会议指出要加快数字产业化、产业数字化，推动数字经济与实体经济深度融合...',category:'hot',date:t,tag:'政策',source:'新华社'},
-      {id:'n2',title:'国家医保局发布新版医保目录调整方案',summary:'新版方案新增74种药品，重点覆盖肿瘤、慢性病、罕见病等领域，预计为患者减负超300亿元。',category:'medical',date:t,tag:'医保',source:'国家医保局'},
-      {id:'n3',title:'全球科技巨头加速布局AI医疗赛道',summary:'多家科技公司宣布在AI辅助诊断、药物研发等领域加大投入，医疗AI市场规模预计2027年突破300亿美元。',category:'medical',date:t,tag:'AI医疗',source:'经济日报'},
-      {id:'n4',title:'中国空间站科学实验取得多项突破',summary:'神舟十八号乘组在轨期间完成多项空间科学实验，包括材料科学、生命科学等领域取得新进展。',category:'hot',date:t,tag:'航天',source:'央视新闻'},
-      {id:'n5',title:'卫健委印发基层卫生健康便民惠民服务举措',summary:'新举措涵盖优化门诊服务、延长服务时间、推进家庭医生签约等内容，旨在提升基层医疗服务可及性。',category:'medical',date:t,tag:'基层医疗',source:'国家卫健委'},
-      {id:'n6',title:'新能源汽车出口量同比增长45%创历史新高',summary:'今年上半年我国新能源汽车出口突破120万辆，出口目的地覆盖欧洲、东南亚等多个市场。',category:'hot',date:t,tag:'汽车',source:'工信部'},
-    ];
-  }
-
-  function saveBM(){STO.set('wb_news_bookmarks',bookmarks)}
-
-  function render(){
-    const filtered=newsFilter==='medical'?articles.filter(a=>a.category==='medical'):articles;
-
-    MAIN.innerHTML=`
-      <div class="mod-header"><div class="mod-title">📰 每日资讯</div>
-        <div class="mod-header-actions">
-          <button class="btn btn-sm btn-secondary" onclick="refreshNews()">${loading?'刷新中...':'🔄 刷新'}</button>
-        </div>
-      </div>
-      <div class="sub-tabs" style="margin:0 12px 8px">
-        <button class="sub-tab ${newsFilter==='all'?'active':''}" data-nfilter="all">🌍 全部资讯</button>
-        <button class="sub-tab ${newsFilter==='medical'?'active':''}" data-nfilter="medical">🏥 医疗资讯</button>
-        <button class="sub-tab" onclick="navigateTo('collection')" style="background:transparent;color:var(--accent)">⭐ 收藏(${bookmarks.length})</button>
-      </div>
-      ${loading?`<div class="empty-state">正在加载资讯...</div>`:
-      filtered.length===0?`<div class="empty-state">暂无资讯，点击刷新获取最新内容</div>`:
-      filtered.map(a=>`
-        <div class="news-item ${a.expanded?'expanded':''}" data-id="${a.id}">
-          <div class="news-title">
-            ${bookmarks.includes(a.id)?'⭐ ':''}${esc(a.title)}
-          </div>
-          <div class="news-meta">
-            <span class="news-badge ${a.category==='medical'?'medical':'hot'}">${a.category==='medical'?'医疗':'热点'}</span>
-            <span>${a.source}</span>
-            <span>${a.date}</span>
-            ${a.tag?`<span>#${esc(a.tag)}</span>`:''}
-          </div>
-          <div class="news-summary">${esc(a.summary)}
-            <div style="margin-top:8px;display:flex;gap:8px">
-              <button class="btn btn-sm ${bookmarks.includes(a.id)?'btn-primary':'btn-secondary'}" data-bm="${a.id}">
-                ${bookmarks.includes(a.id)?'★ 已收藏':'☆ 收藏'}
-              </button>
-            </div>
-          </div>
-        </div>
-      `).join('')}`;
-
-    // Filter tabs
-    $$('[data-nfilter]').forEach(t=>t.onclick=()=>{newsFilter=t.dataset.nfilter;render()});
-    // Expand/collapse
-    $$('.news-item').forEach(item=>{
-      item.onclick=function(e){
-        if(e.target.closest('button'))return;
-        const a=articles.find(a=>a.id===this.dataset.id);
-        if(a){a.expanded=!a.expanded;render()}
-      };
-    });
-    // Bookmark
-    $$('[data-bm]').forEach(b=>{
-      b.onclick=function(e){
-        e.stopPropagation();
-        const id=this.dataset.bm;
-        if(bookmarks.includes(id))bookmarks=bookmarks.filter(b=>b!==id);
-        else bookmarks.push(id);
-        saveBM();render();
-      };
-    });
-  }
-
-  function loadArticles(){
-    loading=true;render();
-    // In a real app, you'd fetch from an API here
-    // For demo, simulate network delay
-    setTimeout(()=>{
-      articles=getDemoArticles();
-      loading=false;render();
-    },600);
-  }
-
-  window.refreshNews=function(){loadArticles();toast('正在刷新...')};
-
-  loadArticles();
-});
-
-// ============================
-//  MODULE 5: ENGLISH
-// ============================
-registerModule('english',()=>{
-  let vocab=STO.get('wb_vocab',[]);
-  let streak=STO.get('wb_eng_streak',{streak:0,lastDate:'',totalDays:0});
-  let engTab='practice'; // practice | vocab | sentences
-
-  // Built-in sentences
-  const builtinSentences=[
-    {en:'The only way to do great work is to love what you do.',zh:'做出伟大成就的唯一途径是热爱你所做的事。'},
-    {en:'Stay hungry, stay foolish.',zh:'求知若饥，虚心若愚。'},
-    {en:'Life is what happens when you\'re busy making other plans.',zh:'生活就是当你忙于制定其他计划时发生的事情。'},
-    {en:'In the middle of difficulty lies opportunity.',zh:'困难之中蕴藏着机遇。'},
-    {en:'The best time to plant a tree was 20 years ago. The second best time is now.',zh:'种一棵树最好的时间是二十年前，其次是现在。'},
-    {en:'Action is the foundational key to all success.',zh:'行动是一切成功的基石。'},
-    {en:'Don\'t count the days, make the days count.',zh:'不要数日子，要让每一天都有意义。'},
-    {en:'Every expert was once a beginner.',zh:'每个专家都曾是初学者。'},
+  // Category config
+  const CATS=[
+    {key:'domestic',name:'国内今日热点',icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`},
+    {key:'medical',name:'医疗政策&卫健资讯',icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`},
+    {key:'international',name:'国际简讯',icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>`},
+    {key:'livelihood',name:'民生财经短讯',icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`},
   ];
 
-  // Quiz state
-  let quizItem=null;
-  let quizType='meaning'; // meaning | spelling
-  let quizAnswer='';
+  // Refresh icon SVG
+  const REFRESH_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;vertical-align:-2px"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>`;
+
+  let readIds=STO.get('wb_news_read_ids',[]); // array of unique keys like "domestic-0"
+  let viewOffset=0; // 0=today, -1=yesterday, -2=day before
+
+  function saveRead(){STO.set('wb_news_read_ids',readIds)}
+
+  function dayIndex(offset=0){
+    const base=new Date(2026,0,1);
+    const now=new Date();
+    now.setDate(now.getDate()+offset);
+    return Math.floor((now-base)/86400000);
+  }
+
+  function pickItems(pool,max){
+    const di=dayIndex(viewOffset);
+    const start=((di*7)%pool.length+pool.length)%pool.length;
+    const result=[];
+    for(let i=0;i<max&&i<pool.length;i++){
+      result.push(pool[(start+i)%pool.length]);
+    }
+    return result;
+  }
+
+  function markRead(key){
+    if(!readIds.includes(key)){readIds.push(key);saveRead()}
+  }
+
+  function isRead(key){return readIds.includes(key)}
+
+  function render(){
+    const dateLabels=['今天','昨天','前天'];
+    const dateLabel=viewOffset>=0?'今天':dateLabels[-viewOffset]||'更早';
+
+    let html=`<div class="mod-header"><div class="mod-title">\u{1F4F0} 每日资讯</div>
+      <div class="mod-header-actions">
+        <button class="btn btn-sm btn-ghost" onclick="refreshNews()">${REFRESH_ICON} 刷新</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:4px;padding:8px 12px 0;align-items:center">
+      <span style="font-size:12px;color:var(--text2)">查看：</span>
+      ${[0,-1,-2].map(o=>`<button class="btn btn-sm ${viewOffset===o?'btn-primary':'btn-secondary'}" style="padding:3px 10px;font-size:11px" data-doff="${o}">${o===0?'今天':o===-1?'昨天':'前天'}</button>`).join('')}
+    </div>`;
+
+    let totalItems=0;
+    CATS.forEach(cat=>{
+      const items=pickItems(POOLS[cat.key],5);
+      totalItems+=items.length;
+
+      html+=`<div class="news-cat">
+        <div class="news-cat-head">${cat.icon}<span>${cat.name}</span></div>
+        ${items.map((item,idx)=>{
+          const key=`${cat.key}-${dayIndex(viewOffset)}-${idx}`;
+          const rd=isRead(key);
+          return `<div class="news-item-v2 ${rd?'read':''}" data-nkey="${key}">
+            <div class="news-title-v2">${esc(item.title)}</div>
+            <div class="news-meta-v2">
+              <span class="news-src-tag">${item.source}</span>
+              <span class="news-date-tag">${dateLabel}</span>
+            </div>
+            <div class="news-summary-v2">${esc(item.summary)}
+              <a href="${item.url}" target="_blank" rel="noopener" class="news-jump" onclick="event.stopPropagation()">
+                查看原文 &nearr;
+              </a>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+    });
+
+    if(totalItems===0){
+      html+='<div class="empty-state">暂无资讯内容</div>';
+    }
+
+    MAIN.innerHTML=html;
+
+    // Date offset tabs
+    $$('[data-doff]').forEach(b=>b.onclick=()=>{viewOffset=parseInt(b.dataset.doff);render()});
+
+    // Item click → expand + mark read
+    $$('.news-item-v2').forEach(el=>{
+      el.addEventListener('click',function(e){
+        if(e.target.closest('a'))return;
+        const key=this.dataset.nkey;
+        markRead(key);
+        this.classList.toggle('expanded');
+        this.classList.add('read');
+      });
+    });
+  }
+
+  window.refreshNews=function(){
+    toast('已刷新最新资讯');
+    render();
+  };
+
+  return render;
+})());
+
+// ============================
+//  MODULE 5: ENGLISH (with NCE)
+// ============================
+registerModule('english',(()=>{
+  // New Concept English bank (real sentences from Books 2/3/4)
+  const NCE_BANK=[
+    {book:2,lesson:1,en:'Last week I went to the theatre.',zh:'上星期我去看戏了。'},
+    {book:2,lesson:2,en:'It was Sunday. I never get up early on Sundays.',zh:'那是星期天。星期天我从不早起。'},
+    {book:2,lesson:3,en:'Please send me a card.',zh:'请给我寄一张明信片来。'},
+    {book:2,lesson:7,en:'Too late. The plane was late.',zh:'太晚了。飞机晚点了。'},
+    {book:2,lesson:11,en:'One good turn deserves another.',zh:'礼尚往来。'},
+    {book:2,lesson:17,en:'My youth has gone, never to return.',zh:'我的青春一去不复返了。'},
+    {book:2,lesson:24,en:'It could be worse.',zh:'情况可能更糟呢。'},
+    {book:2,lesson:33,en:'Out of the darkness.',zh:'冲出黑暗。'},
+    {book:2,lesson:41,en:'Do you call that a hat?',zh:'你管那个叫帽子吗？'},
+    {book:2,lesson:50,en:'Taken for a ride.',zh:'坐霸王车。'},
+    {book:2,lesson:58,en:'A blessing in disguise.',zh:'因祸得福。'},
+    {book:2,lesson:64,en:'The Channel Tunnel.',zh:'英吉利海峡隧道。'},
+    {book:2,lesson:79,en:'By air.',zh:'乘飞机。'},
+    {book:2,lesson:81,en:'Escape.',zh:'逃脱。'},
+    {book:2,lesson:85,en:'Never too old to learn.',zh:'活到老学到老。'},
+    {book:3,lesson:1,en:'A puma at large.',zh:'逃遁的美洲狮。'},
+    {book:3,lesson:2,en:'Thirteen equals one.',zh:'十三等于一。'},
+    {book:3,lesson:3,en:'An unknown goddess.',zh:'无名女神。'},
+    {book:3,lesson:9,en:'Flying cats.',zh:'飞猫。'},
+    {book:3,lesson:13,en:'The Greenwood Boys.',zh:'格林伍德乐队。'},
+    {book:3,lesson:21,en:'Daniel Mendoza.',zh:'丹尼尔·门多萨。'},
+    {book:3,lesson:26,en:'Wanted: a large biscuit tin.',zh:'征购大饼干桶。'},
+    {book:3,lesson:30,en:'The death of a ghost.',zh:'幽灵之死。'},
+    {book:3,lesson:33,en:'A noble gift.',zh:'崇高的礼物。'},
+    {book:3,lesson:38,en:'Everything except the weather.',zh:'唯独没有考虑到天气。'},
+    {book:3,lesson:47,en:'Too high a price?',zh:'代价太高？'},
+    {book:3,lesson:50,en:'New Year resolutions.',zh:'新年决心。'},
+    {book:3,lesson:55,en:'From the earth: greetings.',zh:'来自地球的问候。'},
+    {book:4,lesson:1,en:'Finding fossil man.',zh:'寻找化石人。'},
+    {book:4,lesson:2,en:'Spare that spider.',zh:'饶了那只蜘蛛吧。'},
+    {book:4,lesson:3,en:'Matterhorn man.',zh:'马特洪峰人。'},
+    {book:4,lesson:7,en:'The sporting spirit.',zh:'体育精神。'},
+    {book:4,lesson:11,en:'How to grow old.',zh:'如何安度晚年。'},
+    {book:4,lesson:13,en:'The search for oil.',zh:'探寻石油。'},
+    {book:4,lesson:16,en:'The modern city.',zh:'现代城市。'},
+    {book:4,lesson:22,en:'Knowledge and progress.',zh:'知识与进步。'},
+    {book:4,lesson:27,en:'The "Vasa".',zh:'"瓦萨"号。'},
+    {book:4,lesson:31,en:'The sculptor speaks.',zh:'雕塑家的话。'},
+    {book:4,lesson:35,en:'Justice was done.',zh:'伸张正义。'},
+    {book:4,lesson:40,en:'Waves.',zh:'海浪。'},
+    {book:4,lesson:44,en:'Patterns of culture.',zh:'文化的模式。'},
+    {book:4,lesson:46,en:'Hobbies.',zh:'业余爱好。'},
+  ];
+
+  let vocab=STO.get('wb_vocab',[]);
+  let streak=STO.get('wb_eng_streak',{streak:0,lastDate:'',totalDays:0});
+  let engTab='practice';
 
   function saveV(){STO.set('wb_vocab',vocab)}
   function saveS(){STO.set('wb_eng_streak',streak)}
@@ -1043,39 +1203,41 @@ registerModule('english',()=>{
     streak.lastDate=t;saveS();
   }
 
-  function pickQuiz(){
-    if(vocab.length===0){
-      quizItem=builtinSentences[Math.floor(Math.random()*builtinSentences.length)];
-      quizType='meaning';
-    }else{
-      if(Math.random()>.5&&vocab.length>0){
-        quizItem=vocab[Math.floor(Math.random()*vocab.length)];
-        quizType='meaning';
-      }else{
-        quizItem=vocab[Math.floor(Math.random()*vocab.length)];
-        quizType='spelling';
-      }
+  function pickDailyNCE(){
+    const di=dayIndex();
+    const start=(di*5)%NCE_BANK.length;
+    const arr=[];
+    for(let i=0;i<5;i++){
+      arr.push(NCE_BANK[(start+i)%NCE_BANK.length]);
     }
-    quizAnswer='';
+    return arr;
   }
-  if(!quizItem)pickQuiz();
+
+  function playTTS(text){
+    if(!('speechSynthesis'in window)){toast('您的浏览器不支持语音播放');return}
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang='en-US';
+    u.rate=0.85;
+    speechSynthesis.speak(u);
+  }
 
   function render(){
     checkStreak();
     MAIN.innerHTML=`
-      <div class="mod-header"><div class="mod-title">📖 英语练习</div></div>
+      <div class="mod-header"><div class="mod-title">\u{1F4D6} 英语练习</div></div>
 
       <!-- Streak -->
       <div class="eng-streak">
-        <div class="eng-streak-num">🔥 ${streak.streak}</div>
+        <div class="eng-streak-num">\u{1F525} ${streak.streak}</div>
         <div class="eng-streak-label">连续学习天数 · 累计 ${streak.totalDays} 天</div>
       </div>
 
       <!-- Tabs -->
       <div class="sub-tabs">
-        <button class="sub-tab ${engTab==='practice'?'active':''}" data-etab="practice">📝 今日练习</button>
-        <button class="sub-tab ${engTab==='vocab'?'active':''}" data-etab="vocab">📚 生词本</button>
-        <button class="sub-tab ${engTab==='sentences'?'active':''}" data-etab="sentences">💬 每日短句</button>
+        <button class="sub-tab ${engTab==='practice'?'active':''}" data-etab="practice">\u{1F4DD} 新概念每日5句</button>
+        <button class="sub-tab ${engTab==='vocab'?'active':''}" data-etab="vocab">\u{1F4DA} 生词本</button>
+        <button class="sub-tab ${engTab==='sentences'?'active':''}" data-etab="sentences">\u{1F4AC} 每日短句</button>
       </div>
 
       ${engTab==='practice'?renderPractice():engTab==='vocab'?renderVocab():renderSentences()}`;
@@ -1084,39 +1246,27 @@ registerModule('english',()=>{
   }
 
   function renderPractice(){
-    if(!quizItem)pickQuiz();
-    if(quizType==='meaning'){
-      return `
-      <div class="card">
-        <div class="quiz-card">
-          <div class="quiz-word">${esc(quizItem.word||quizItem.en||'')}</div>
-          ${quizItem.example?`<div class="quiz-hint">例句：${esc(quizItem.example)}</div>`:''}
-          <input class="quiz-input" id="quiz-answer" placeholder="输入中文意思..." autocomplete="off">
-          <div class="quiz-result" id="quiz-result"></div>
-          <button class="btn btn-primary" onclick="checkQuiz()" style="margin-top:10px">检查</button>
-          <button class="btn btn-secondary" onclick="nextQuiz()" style="margin-top:10px;margin-left:6px">下一题</button>
-        </div>
+    const items=pickDailyNCE();
+    return `
+      <div class="eng-card">
+        ${items.map((s,i)=>`
+          <div class="nce-card">
+            <div class="nce-en">${esc(s.en)}</div>
+            <div class="nce-zh">${esc(s.zh)}</div>
+            <div class="nce-meta">新概念英语第${s.book}册 第${s.lesson}课</div>
+            <button class="nce-play-btn" onclick="playNCE(this,\`${esc(s.en).replace(/`/g,'\\`')}\`)">
+              \u{1F50A} 听原句朗读
+            </button>
+          </div>
+        `).join('')}
       </div>`;
-    }else{
-      return `
-      <div class="card">
-        <div class="quiz-card">
-          <div class="quiz-word">${esc(quizItem.meaning||'')}</div>
-          ${quizItem.example?`<div class="quiz-hint">例句：${esc(quizItem.example)}</div>`:''}
-          <input class="quiz-input" id="quiz-answer" placeholder="输入英文单词..." autocomplete="off">
-          <div class="quiz-result" id="quiz-result"></div>
-          <button class="btn btn-primary" onclick="checkQuiz()" style="margin-top:10px">检查</button>
-          <button class="btn btn-secondary" onclick="nextQuiz()" style="margin-top:10px;margin-left:6px">下一题</button>
-        </div>
-      </div>`;
-    }
   }
 
   function renderVocab(){
     return `
-      <div class="card">
+      <div class="eng-card">
         <div class="card-header">
-          <div class="card-title">📚 我的生词本 (${vocab.length})</div>
+          <div class="card-title">\u{1F4DA} 我的生词本 (${vocab.length})</div>
           <button class="btn btn-primary btn-sm" onclick="addVocabWord()">+ 添加</button>
         </div>
         ${vocab.length===0?'<div class="empty-state">还没有生词，点击右上角添加</div>':
@@ -1126,7 +1276,7 @@ registerModule('english',()=>{
               <div class="list-item-title">${esc(w.word)}</div>
               <div class="list-item-meta">
                 <span>${esc(w.meaning)}</span>
-                ${w.example?`<span>💬 ${esc(w.example)}</span>`:''}
+                ${w.example?`<span>\u{1F4AC} ${esc(w.example)}</span>`:''}
               </div>
             </div>
             <button class="btn btn-sm btn-danger" onclick="deleteVocab(${i})">删除</button>
@@ -1136,10 +1286,20 @@ registerModule('english',()=>{
   }
 
   function renderSentences(){
+    const builtin=[
+      {en:'The only way to do great work is to love what you do.',zh:'做出伟大成就的唯一途径是热爱你所做的事。'},
+      {en:'Stay hungry, stay foolish.',zh:'求知若饥，虚心若愚。'},
+      {en:'Life is what happens when you\'re busy making other plans.',zh:'生活就是当你忙于制定其他计划时发生的事情。'},
+      {en:'In the middle of difficulty lies opportunity.',zh:'困难之中蕴藏着机遇。'},
+      {en:'The best time to plant a tree was 20 years ago. The second best time is now.',zh:'种一棵树最好的时间是二十年前，其次是现在。'},
+      {en:'Action is the foundational key to all success.',zh:'行动是一切成功的基石。'},
+      {en:'Don\'t count the days, make the days count.',zh:'不要数日子，要让每一天都有意义。'},
+      {en:'Every expert was once a beginner.',zh:'每个专家都曾是初学者。'},
+    ];
     return `
-      <div class="card">
-        <div class="card-header"><div class="card-title">💬 每日短句</div></div>
-        ${builtinSentences.map((s,i)=>`
+      <div class="eng-card">
+        <div class="card-header"><div class="card-title">\u{1F4AC} 每日短句</div></div>
+        ${builtin.map((s,i)=>`
           <div class="list-item">
             <div class="list-item-body">
               <div class="list-item-title">${esc(s.en)}</div>
@@ -1150,6 +1310,12 @@ registerModule('english',()=>{
         `).join('')}
       </div>`;
   }
+
+  window.playNCE=function(btn,text){
+    playTTS(text);
+    btn.textContent='\u{1F3A4} 正在播放...';
+    setTimeout(()=>{btn.textContent='\u{1F50A} 再听一遍'},3000);
+  };
 
   window.addVocabWord=function(){
     showModal('添加生词',`
@@ -1167,50 +1333,204 @@ registerModule('english',()=>{
   window.copyText=function(t){
     navigator.clipboard.writeText(t).then(()=>toast('已复制')).catch(()=>toast('复制失败'));
   };
-  window.checkQuiz=function(){
-    const ans=$('#quiz-answer').value.trim();
-    if(!ans){toast('请输入答案');return}
-    const r=$('#quiz-result');
-    let correct=false;
-    if(quizType==='meaning'){
-      const expected=quizItem.meaning||quizItem.zh||'';
-      correct=ans.toLowerCase().includes(expected.toLowerCase().slice(0,2))||expected.toLowerCase().includes(ans.toLowerCase().slice(0,2));
-    }else{
-      correct=ans.toLowerCase()===((quizItem.word||quizItem.en||'').toLowerCase());
-    }
-    if(correct){r.textContent='✅ 正确！';r.className='quiz-result correct';checkStreak();saveS()}
-    else{r.textContent=`❌ 答案是：${quizItem.meaning||quizItem.zh||quizItem.word||''}`;r.className='quiz-result wrong'}
-  };
-  window.nextQuiz=function(){pickQuiz();render()};
 
-  render();
-});
+  return render;
+})());
 
 // ============================
-//  MODULE 6: SETTINGS
+//  MODULE 6: DAILY QUIZ (护理学中级真题)
+// ============================
+registerModule('dailyquiz',(()=>{
+  // 护理学（中级）/主管护师 历年真题题库
+  // 年份按2026→2021倒序排列，每天从当前年份开始抽取，抽完再往前一年
+  const BANK=[
+    {year:2026,q:'正常成人安静状态下脉搏次数为（次/分）：',opts:['60~100','100~120','<60','>120','40~60'],ans:0},
+    {year:2026,q:'成人正常血压收缩压范围为（mmHg）：',opts:['90~139','140~159','<90','>140','80~130'],ans:0},
+    {year:2026,q:'青霉素过敏性休克首选抢救药物是：',opts:['盐酸肾上腺素','异丙肾上腺素','地塞米松','多巴胺','去甲肾上腺素'],ans:0},
+    {year:2026,q:'成人胸外心脏按压的深度为（cm）：',opts:['2~3','3~4','5~6','1~2','≥6'],ans:2},
+    {year:2026,q:'心肺复苏时胸外按压与人工呼吸的比例为：',opts:['15:2','30:2','5:1','30:1','15:1'],ans:1},
+    {year:2026,q:'判断心脏骤停最主要的依据是：',opts:['面色苍白','意识丧失伴大动脉搏动消失','呼吸停止','瞳孔散大','心音消失'],ans:1},
+    {year:2026,q:'开放性气胸的急救处理首先是：',opts:['吸氧','用无菌敷料封闭伤口','立即清创','胸腔闭式引流','气管插管'],ans:1},
+    {year:2026,q:'颅内压增高患者宜采取的体位是：',opts:['平卧位','床头抬高15°~30°','头低足高位','侧卧位','半坐卧位'],ans:1},
+    {year:2026,q:'等渗性脱水患者补液应首选：',opts:['5%葡萄糖','平衡盐溶液','0.9%氯化钠','5%碳酸氢钠','10%葡萄糖'],ans:1},
+    {year:2026,q:'休克患者宜采取的卧位是：',opts:['平卧位','中凹卧位','半坐卧位','端坐位','头低足高位'],ans:1},
+    {year:2025,q:'左心衰竭最典型的临床表现是：',opts:['咳嗽咳痰','呼吸困难和肺水肿','恶心呕吐','水肿','心悸'],ans:1},
+    {year:2025,q:'洋地黄中毒最常见的心律失常是：',opts:['心房颤动','室性期前收缩（二联律）','房室传导阻滞','窦性心动过速','心室颤动'],ans:1},
+    {year:2025,q:'风湿性心脏病中最常受累的瓣膜是：',opts:['二尖瓣','主动脉瓣','三尖瓣','肺动脉瓣','联合瓣膜'],ans:0},
+    {year:2025,q:'消化性溃疡最常见的并发症是：',opts:['癌变','出血','穿孔','幽门梗阻','瘘管'],ans:1},
+    {year:2025,q:'肝硬化患者最常见的死亡原因是：',opts:['上消化道出血','肝性脑病','感染','肝肾综合征','原发性肝癌'],ans:1},
+    {year:2025,q:'急性胰腺炎患者禁用的镇痛药物是：',opts:['哌替啶','阿托品','吗啡','西咪替丁','生长抑素'],ans:2},
+    {year:2025,q:'肺癌大多起源于：',opts:['支气管黏膜上皮','肺泡上皮','细支气管','肺间质','胸膜'],ans:0},
+    {year:2025,q:'诊断呼吸衰竭最重要的依据是：',opts:['呼吸困难','发绀','血气分析 PaO₂<60mmHg伴或不伴PaCO₂>50mmHg','意识障碍','心率增快'],ans:2},
+    {year:2025,q:'糖尿病酮症酸中毒时静脉输注胰岛素宜选用：',opts:['大剂量','小剂量短效胰岛素','中效胰岛素','长效胰岛素','皮下注射'],ans:1},
+    {year:2025,q:'Graves病最具特征性的表现是：',opts:['怕热多汗','突眼','心悸','消瘦','甲状腺肿大'],ans:1},
+    {year:2024,q:'类风湿关节炎最早受累的关节是：',opts:['近端指间关节','远端指间关节','膝关节','髋关节','脊柱'],ans:0},
+    {year:2024,q:'骨折的专有体征是：',opts:['疼痛','肿胀','畸形、反常活动、骨擦音/骨擦感','功能障碍','瘀斑'],ans:2},
+    {year:2024,q:'颅内压增高的"三主征"是：',opts:['头痛、呕吐、视乳头水肿','头痛、头晕、呕吐','呕吐、偏瘫、视乳头水肿','头痛、视乳头水肿、意识障碍','头痛、呕吐、血压升高'],ans:0},
+    {year:2024,q:'甲状腺大部切除术后最危急的并发症是：',opts:['手足抽搐','呼吸困难和窒息','喉返神经损伤','喉上神经损伤','甲状腺危象'],ans:1},
+    {year:2024,q:'乳腺癌最好发的部位是：',opts:['外上象限','内上象限','外下象限','内下象限','乳头乳晕区'],ans:0},
+    {year:2024,q:'急性阑尾炎典型的腹痛特点是：',opts:['持续性腹痛','转移性右下腹痛','阵发性绞痛','腰背部放射痛','全腹痛'],ans:1},
+    {year:2024,q:'肛裂"三联征"是指：',opts:['疼痛、便秘、出血','疼痛、瘙痒、脱出','出血、脱出、疼痛','便秘、脱出、瘙痒','疼痛、出血、狭窄'],ans:0},
+    {year:2024,q:'膀胱癌最常见的症状是：',opts:['尿频尿急','无痛性肉眼血尿','排尿困难','疼痛','腹部包块'],ans:1},
+    {year:2024,q:'良性前列腺增生最典型的症状是：',opts:['血尿','进行性排尿困难','尿失禁','尿痛','尿频'],ans:1},
+    {year:2023,q:'子痫前期/妊娠期高血压疾病治疗的首选解痉药物是：',opts:['地西泮','硫酸镁','苯巴比妥','硝苯地平','呋塞米'],ans:1},
+    {year:2023,q:'使用硫酸镁治疗时，中毒的首要表现是：',opts:['呼吸抑制','心率减慢','膝腱反射消失','尿量减少','血压下降'],ans:2},
+    {year:2023,q:'硫酸镁中毒的解救药物是：',opts:['阿托品','10%葡萄糖酸钙','肾上腺素','地塞米松','碳酸氢钠'],ans:1},
+    {year:2023,q:'前置胎盘的主要临床表现是：',opts:['腹痛伴阴道流血','无痛性反复阴道流血','胎心消失','子宫板状硬','血压升高'],ans:1},
+    {year:2023,q:'胎盘早剥的主要表现是：',opts:['无痛性阴道流血','腹痛伴阴道流血、子宫板状硬','胎动频繁','贫血','发热'],ans:1},
+    {year:2023,q:'新生儿Apgar评分中，轻度窒息为（分）：',opts:['0~3','4~7','8~10','1~2','5~6'],ans:1},
+    {year:2023,q:'小儿前囟闭合的正常时间为：',opts:['3~6个月','1~1.5岁','2岁','6~8个月','3岁'],ans:1},
+    {year:2023,q:'小儿维生素D缺乏性佝偻病初期最常见的表现是：',opts:['骨骼畸形','多汗、易激惹、夜惊','方颅','鸡胸','手足搐搦'],ans:1},
+    {year:2023,q:'法洛四联症包括的四种畸形是：',opts:['室间隔缺损、主动脉骑跨、肺动脉狭窄、右心室肥厚','房间隔缺损、主动脉骑跨、肺动脉狭窄、左心室肥厚','室间隔缺损、主动脉缩窄、肺动脉狭窄、右心室肥厚','房间隔缺损、主动脉骑跨、肺动脉狭窄、右心室肥厚','室间隔缺损、主动脉骑跨、肺静脉狭窄、右心室肥厚'],ans:0},
+    {year:2023,q:'小儿腹泻时口服补液盐（ORS）适用于：',opts:['重度脱水','轻中度脱水无严重呕吐','休克','心功能不全','肾功能不全'],ans:1},
+    {year:2022,q:'成年人的液体失衡中，低渗性缺水血清钠浓度低于（mmol/L）：',opts:['135','130','140','145','150'],ans:0},
+    {year:2022,q:'我国烧伤面积计算采用的中国新九分法，双上肢面积占体表面积的（%）：',opts:['9','18','27','46','36'],ans:1},
+    {year:2022,q:'阿托品化的表现不包括：',opts:['瞳孔扩大','颜面潮红','皮肤干燥','心率减慢','口干'],ans:3},
+    {year:2022,q:'有机磷农药中毒的特效解毒剂是：',opts:['阿托品','解磷定（氯磷定）','阿托品+胆碱酯酶复能剂','纳洛酮','地塞米松'],ans:2},
+    {year:2022,q:'一氧化碳中毒最具特征性的表现是：',opts:['头痛头晕','皮肤黏膜呈樱桃红色','恶心呕吐','意识障碍','呼吸困难'],ans:1},
+    {year:2022,q:'最严重的一种输血反应是：',opts:['发热反应','过敏反应','溶血反应','循环负荷过重','细菌污染反应'],ans:2},
+    {year:2022,q:'溶血反应典型的临床表现是：',opts:['发热寒战','腰背剧痛、血红蛋白尿','皮疹瘙痒','呼吸困难','心率减慢'],ans:1},
+    {year:2022,q:'破伤风患者治疗首选：',opts:['青霉素+破伤风抗毒素（TAT）','甲硝唑','镇静剂','清创','糖皮质激素'],ans:0},
+    {year:2022,q:'执行隔离技术时，无菌持物钳不可夹取：',opts:['无菌纱布','无菌容器','油纱布','无菌器械','无菌溶液瓶'],ans:2},
+    {year:2022,q:'护理程序正确的步骤是：',opts:['评估、诊断、计划、实施、评价','诊断、评估、计划、实施、评价','计划、评估、诊断、实施、评价','评估、计划、诊断、实施、评价','评价、诊断、计划、实施、评估'],ans:0},
+    {year:2021,q:'马斯洛需要层次理论中，最低层次的需要是：',opts:['生理需要','安全需要','爱与归属','尊重','自我实现'],ans:0},
+    {year:2021,q:'下列哪项属于医院内感染：',opts:['入院时已存在的感染','慢性感染急性发作','住院期间获得的感染','院前已感染的潜伏期','既往感染复发'],ans:2},
+    {year:2021,q:'压疮（压力性损伤）好发于：',opts:['骨隆突处','关节屈侧','腹部','背部','四肢末端'],ans:0},
+    {year:2021,q:'鼻饲时每次鼻饲量不应超过（ml）：',opts:['100','200','300','400','500'],ans:1},
+    {year:2021,q:'为膀胱高度膨胀且极度衰弱的患者首次放尿不应超过（ml）：',opts:['500','1000','1500','2000','800'],ans:1},
+    {year:2021,q:'大量不保留灌肠时，成人每次灌肠液量一般为（ml）：',opts:['200~500','500~1000','1000~1500','1500~2000','100~200'],ans:1},
+    {year:2021,q:'发生空气栓塞时，患者宜采取的体位是：',opts:['半坐卧位','头低足高左侧卧位','平卧位','端坐位','中凹卧位'],ans:1},
+    {year:2021,q:'急性血源性骨髓炎最常见的致病菌是：',opts:['溶血性链球菌','金黄色葡萄球菌','大肠杆菌','肺炎球菌','铜绿假单胞菌'],ans:1},
+    {year:2021,q:'颈椎病中最常见的一型是：',opts:['神经根型','脊髓型','椎动脉型','交感神经型','混合型'],ans:0},
+    {year:2021,q:'腰椎间盘突出症最常发生在：',opts:['L1~L2','L2~L3','L4~L5、L5~S1','L3~L4','胸椎'],ans:2},
+    {year:2021,q:'确定患者意识丧失时，判断方法为：',opts:['拍肩并呼叫','摇动身体','掐人中','测血压','听呼吸'],ans:0},
+    {year:2021,q:'成人大量咯血是指24小时咯血量超过（ml）：',opts:['>100','>300','>500','>800','>1000'],ans:2},
+  ];
+
+  const OPT_LABELS=['A','B','C','D','E'];
+
+  let records=STO.get('wb_dq_records',{}); // {qid:{sel:null|idx, correct:bool}}
+  let wrongSet=STO.get('wb_dq_wrong_set',[]); // [qid,...]
+  let dqFilter='all'; // all | wrong | undone
+
+  function saveRecords(){STO.set('wb_dq_records',records)}
+  function saveWrong(){STO.set('wb_dq_wrong_set',wrongSet)}
+
+  function getDayQuestions(){
+    const base=new Date(2026,0,1);
+    const di=Math.floor((new Date()-base)/86400000);
+    const start=(di*10)%BANK.length;
+    const qs=[];
+    for(let i=0;i<10;i++){
+      qs.push({...BANK[(start+i)%BANK.length],_qi:(start+i)%BANK.length});
+    }
+    return qs;
+  }
+
+  function render(){
+    const allQs=getDayQuestions();
+
+    let displayQs=allQs;
+    if(dqFilter==='wrong'){
+      displayQs=allQs.filter(q=>records[q._qi]&&records[q._qi].correct===false);
+    }else if(dqFilter==='undone'){
+      displayQs=allQs.filter(q=>!records[q._qi]||records[q._qi].sel===null);
+    }
+
+    const answered=allQs.filter(q=>records[q._qi]&&records[q._qi].sel!==null).length;
+    const correct=allQs.filter(q=>records[q._qi]&&records[q._qi].correct===true).length;
+
+    MAIN.innerHTML=`
+      <div class="mod-header"><div class="mod-title">\u{1F4DD} 每日十题 · 护理学中级</div></div>
+
+      <!-- Stats -->
+      <div class="dq-stats">
+        <div class="dq-stat"><div class="dq-num">${answered}/10</div><div class="dq-label">已答</div></div>
+        <div class="dq-stat"><div class="dq-num" style="color:var(--success)">${correct}</div><div class="dq-label">正确</div></div>
+        <div class="dq-stat"><div class="dq-num" style="color:var(--danger)">${answered-correct}</div><div class="dq-label">错误</div></div>
+      </div>
+
+      <!-- Filter -->
+      <div class="dq-filter-tabs">
+        <button class="dq-ftab ${dqFilter==='all'?'active':''}" data-dqf="all">全部题目</button>
+        <button class="dq-ftab ${dqFilter==='wrong'?'active':''}" data-dqf="wrong">错题复习</button>
+        <button class="dq-ftab ${dqFilter==='undone'?'active':''}" data-dqf="undone">未做题目</button>
+      </div>
+
+      ${displayQs.length===0?`<div class="empty-state">${dqFilter==='wrong'?'没有错题，继续保持！':'所有题目已完成！'}</div>`:
+      displayQs.map((q,_i)=>{
+        const rec=records[q._qi]||{};
+        const answered=rec.sel!==null&&rec.sel!==undefined;
+        return `
+        <div class="dq-q ${answered?'answered':''}" data-qi="${q._qi}">
+          <div class="dq-q-text">${_i+1}. ${esc(q.q)} <span style="font-size:11px;color:var(--text3)">(${q.year}年真题)</span></div>
+          ${q.opts.map((opt,oi)=>{
+            const isAns=oi===q.ans;
+            const isSel=rec.sel===oi;
+            let cls='dq-opt';
+            if(answered){
+              cls+=' disabled';
+              if(isAns)cls+=' correct';
+              else if(isSel)cls+=' wrong';
+            }else if(isSel)cls+=' sel';
+            return `<button class="${cls}" data-qi="${q._qi}" data-oi="${oi}">
+              <span class="dq-opt-label">${OPT_LABELS[oi]}</span> ${esc(opt)}
+            </button>`;
+          }).join('')}
+          ${answered&&!rec.correct?`<div class="dq-explain">正确答案：${OPT_LABELS[q.ans]} ${esc(q.opts[q.ans])}</div>`:''}
+        </div>`;
+      }).join('')}
+    `;
+
+    // Filter tabs
+    $$('[data-dqf]').forEach(b=>b.onclick=()=>{dqFilter=b.dataset.dqf;render()});
+
+    // Option clicks
+    $$('.dq-opt:not(.disabled)').forEach(opt=>{
+      opt.addEventListener('click',function(){
+        const qi=parseInt(this.dataset.qi);
+        const oi=parseInt(this.dataset.oi);
+        const q=BANK.find((_,i)=>i===qi)||BANK[qi];
+
+        records[qi]={sel:oi, correct:oi===q.ans};
+        if(!records[qi].correct&&!wrongSet.includes(qi)){
+          wrongSet.push(qi);
+          saveWrong();
+        }
+        saveRecords();
+        render();
+      });
+    });
+  }
+
+  return render;
+})());
+
+// ============================
+//  MODULE 7: SETTINGS
 // ============================
 registerModule('settings',()=>{
   function render(){
     MAIN.innerHTML=`
-      <div class="mod-header"><div class="mod-title">⚙️ 个人设置</div></div>
+      <div class="mod-header"><div class="mod-title">\u2699\uFE0F 个人设置</div></div>
       <div class="card" style="margin:16px 12px">
         <div class="setting-item">
-          <div><div class="setting-label">📤 数据备份</div><div class="setting-desc">导出全部数据为JSON文件，可保存到本地</div></div>
+          <div><div class="setting-label">\u{1F4E4} 数据备份</div><div class="setting-desc">导出全部数据为JSON文件，可保存到本地</div></div>
           <button class="btn btn-primary btn-sm" onclick="exportData()">导出</button>
         </div>
         <div class="setting-item">
-          <div><div class="setting-label">📥 数据恢复</div><div class="setting-desc">从备份的JSON文件恢复数据</div></div>
+          <div><div class="setting-label">\u{1F4E5} 数据恢复</div><div class="setting-desc">从备份的JSON文件恢复数据</div></div>
           <button class="btn btn-secondary btn-sm" onclick="document.getElementById('import-file').click()">导入</button>
           <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(this)">
         </div>
         <div class="setting-item">
-          <div><div class="setting-label">🗑️ 清除缓存</div><div class="setting-desc">重置所有数据，此操作不可恢复</div></div>
+          <div><div class="setting-label">\u{1F5D1}\uFE0F 清除缓存</div><div class="setting-desc">重置所有数据，此操作不可恢复</div></div>
           <button class="btn btn-danger btn-sm" onclick="clearAllData()">清除</button>
         </div>
       </div>
       <div class="card" style="margin:16px 12px">
         <div class="card-pad" style="font-size:13px;color:var(--text2);text-align:center">
-          小周的工作台 v2.0<br>
+          小周的工作台 v2.1<br>
           数据完全存储在浏览器本地，安全私密
         </div>
       </div>`;
@@ -1218,7 +1538,9 @@ registerModule('settings',()=>{
 
   window.exportData=function(){
     const data={};
-    const keys=['wb_todos_full','wb_collections','wb_exercise_logs','wb_weights','wb_exercise_plans','wb_news_bookmarks','wb_vocab','wb_eng_streak'];
+    const keys=['wb_todos_full','wb_collections','wb_exercise_logs','wb_weights','wb_exercise_plans',
+      'wb_news_bookmarks','wb_vocab','wb_eng_streak','wb_news_read_ids',
+      'wb_dq_records','wb_dq_wrong_set'];
     keys.forEach(k=>{data[k]=STO.get(k,null)});
     const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
     const a=document.createElement('a');a.href=URL.createObjectURL(blob);
@@ -1242,8 +1564,10 @@ registerModule('settings',()=>{
   };
 
   window.clearAllData=function(){
-    if(confirm('确定要清除所有数据吗？此操作不可恢复！\n\n建议先导出备份。')){
-      const keys=['wb_todos_full','wb_collections','wb_exercise_logs','wb_weights','wb_exercise_plans','wb_news_bookmarks','wb_vocab','wb_eng_streak'];
+    if(confirm('\u786E\u5B9A\u8981\u6E05\u9664\u6240\u6709\u6570\u636E\u5417\uFF1F\u6B64\u64CD\u4F5C\u4E0D\u53EF\u6062\u590D\uFF01\n\n\u5efa\u8BAE\u5148\u5BFC\u51FA\u5907\u4efd\u3002')){
+      const keys=['wb_todos_full','wb_collections','wb_exercise_logs','wb_weights','wb_exercise_plans',
+        'wb_news_bookmarks','wb_vocab','wb_eng_streak','wb_news_read_ids',
+        'wb_dq_records','wb_dq_wrong_set'];
       keys.forEach(k=>localStorage.removeItem(k));
       toast('已清除，页面即将刷新');
       setTimeout(()=>location.reload(),1000);
