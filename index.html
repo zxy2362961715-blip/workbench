@@ -1042,9 +1042,15 @@ registerModule('news',(()=>{
 
   function saveRead(){STO.set('wb_news_read_ids',readIds)}
 
-  // 每条资讯的"查看原文"链接：基于标题做新闻检索，跳转到该热点对应的真实原文页面
-  function newsSearchUrl(t){
-    return 'https://news.baidu.com/ns?word='+encodeURIComponent(t);
+  // "查看原文"链接：按所选平台检索该热点对应的真实内容
+  // 支持 百度新闻 / 抖音 / 小红书 三种平台，选择记录保存到 localStorage
+  let newsPlatform=STO.get('wb_news_platform','baidu'); // baidu | douyin | xhs
+  function savePlatform(){STO.set('wb_news_platform',newsPlatform)}
+  function newsUrl(t){
+    const q=encodeURIComponent(t);
+    if(newsPlatform==='douyin') return 'https://www.douyin.com/search/'+q;
+    if(newsPlatform==='xhs')    return 'https://www.xiaohongshu.com/search_result?keyword='+q;
+    return 'https://news.baidu.com/ns?word='+q;
   }
 
   function dayIndex(offset=0){
@@ -1082,6 +1088,10 @@ registerModule('news',(()=>{
     <div style="display:flex;gap:4px;padding:8px 12px 0;align-items:center">
       <span style="font-size:12px;color:var(--text2)">查看：</span>
       ${[0,-1,-2].map(o=>`<button class="btn btn-sm ${viewOffset===o?'btn-primary':'btn-secondary'}" style="padding:3px 10px;font-size:11px" data-doff="${o}">${o===0?'今天':o===-1?'昨天':'前天'}</button>`).join('')}
+    </div>
+    <div style="display:flex;gap:4px;padding:6px 12px 4px;align-items:center">
+      <span style="font-size:12px;color:var(--text2)">原文平台：</span>
+      ${[['baidu','百度新闻'],['douyin','抖音'],['xhs','小红书']].map(([k,n])=>`<button class="btn btn-sm ${newsPlatform===k?'btn-primary':'btn-secondary'}" style="padding:3px 10px;font-size:11px" data-nplat="${k}">${n}</button>`).join('')}
     </div>`;
 
     let totalItems=0;
@@ -1101,7 +1111,7 @@ registerModule('news',(()=>{
               <span class="news-date-tag">${dateLabel}</span>
             </div>
             <div class="news-summary-v2">${esc(item.summary)}
-              <a href="${newsSearchUrl(item.title)}" target="_blank" rel="noopener" class="news-jump" onclick="event.stopPropagation()">
+              <a href="${newsUrl(item.title)}" target="_blank" rel="noopener" class="news-jump" onclick="event.stopPropagation()">
                 查看原文 &nearr;
               </a>
             </div>
@@ -1118,6 +1128,9 @@ registerModule('news',(()=>{
 
     // Date offset tabs
     $$('[data-doff]').forEach(b=>b.onclick=()=>{viewOffset=parseInt(b.dataset.doff);render()});
+
+    // Platform selector for "查看原文" links
+    $$('[data-nplat]').forEach(b=>b.onclick=()=>{newsPlatform=b.dataset.nplat;savePlatform();render()});
 
     // Item click → expand + mark read
     $$('.news-item-v2').forEach(el=>{
