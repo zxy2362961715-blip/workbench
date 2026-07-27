@@ -473,6 +473,7 @@ function esc(s){const d=document.createElement('div');d.textContent=s;return d.i
 function fmtDate(d){const m=d.getMonth()+1,da=d.getDate();return d.getFullYear()+'-'+String(m).padStart(2,'0')+'-'+String(da).padStart(2,'0')}
 function todayStr(){return fmtDate(new Date())}
 function fmtDateCN(d){return (d.getMonth()+1)+'月'+d.getDate()+'日'}
+function dayIndex(){return Math.floor(Date.now()/86400000)}
 
 // Toast
 function toast(msg){
